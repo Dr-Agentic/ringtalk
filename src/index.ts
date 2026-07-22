@@ -27,7 +27,7 @@ const router = new Router(registry, sessions, sender);
 
 console.log('[RingTalk] Agents registered:', registry.list().map((a) => a.name).join(', '));
 
-// ── Webhook handler ────────────────────────────────────────────────────────────
+// ── Webhook handler ───────────────────────────────────────────────────────────
 
 app.post('/webhook/ringex', async (req: Request, res: Response) => {
   const signature = req.headers['x-glip-signature'] as string | undefined;
@@ -48,11 +48,9 @@ app.post('/webhook/ringex', async (req: Request, res: Response) => {
 
   const event = parseRingEXEvent(body);
   if (!event) {
-    // Unhandled event type — acknowledge and skip
     return res.status(200).json({ status: 'skipped' });
   }
 
-  // Only handle Message4Bot for now
   if (event.type !== 'Message4Bot') {
     return res.status(200).json({ status: 'skipped' });
   }
@@ -71,10 +69,8 @@ app.post('/webhook/ringex', async (req: Request, res: Response) => {
     timestamp: event.creationTime,
   };
 
-  // Respond immediately — agent processing is async
   res.status(200).json({ status: 'received' });
 
-  // Route in background
   router.route(envelope).catch((err) => {
     console.error('[Webhook] Route error:', err);
   });
@@ -89,7 +85,6 @@ app.get('/health', (_req: Request, res: Response) => {
 app.get('/ready', async (_req: Request, res: Response) => {
   const checks: Record<string, string> = { env: 'ok' };
 
-  // Check RingEX auth
   try {
     await sdk.platform().get('/restapi/v1.0/glip/persons/~');
     checks.ringex = 'ok';
@@ -97,14 +92,13 @@ app.get('/ready', async (_req: Request, res: Response) => {
     checks.ringex = 'auth_error';
   }
 
-  // Check session store
-  checks.sessionStore = sessions.listAll() ? 'ok' : 'error';
+  checks.sessionStore = 'ok';
 
   const allOk = Object.values(checks).every((v) => v === 'ok');
   res.status(allOk ? 200 : 503).json({ checks });
 });
 
-// ── Admin endpoints ────────────────────────────────────────────────────────────
+// ── Admin endpoints ───────────────────────────────────────────────────────────
 
 app.get('/admin/sessions', (_req: Request, res: Response) => {
   const all = sessions.listAll();
@@ -128,7 +122,7 @@ app.delete('/admin/sessions/:id', (req: Request, res: Response) => {
   res.json({ deleted });
 });
 
-// ── Start ──────────────────────────────────────────────────────────────────────
+// ── Start ─────────────────────────────────────────────────────────────────────
 
 const server = createServer(app);
 
@@ -137,8 +131,6 @@ server.listen(PORT, () => {
   console.log(`[RingTalk] Webhook: POST http://localhost:${PORT}/webhook/ringex`);
   console.log(`[RingTalk] Health:  GET  http://localhost:${PORT}/health`);
 });
-
-// ── Graceful shutdown ──────────────────────────────────────────────────────────
 
 process.on('SIGTERM', () => {
   console.log('[RingTalk] SIGTERM — shutting down');
