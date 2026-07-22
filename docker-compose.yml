@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  ringtalk:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      # Mount .env for local dev overrides
+      - ./.env:/app/.env:ro
+
+  # ngrok tunnel — exposes localhost:3000 as a public HTTPS URL
+  # Get your auth token from https://dashboard.ngrok.com
+  ngrok:
+    image: ngrok/ngrok:alpine
+    restart: unless-stopped
+    command:
+      - "http"
+      - "ringtalk:3000"
+      - "--domain"   # omit to get random URL; set to reserve a subdomain
+      # - "--authtoken=${NGROK_AUTHTOKEN}"
+      # - "--domain=your-subdomain.ngrok-free.app"  # uncomment and set for a fixed URL
+    ports:
+      - "4040:4040"   # ngrok web UI (local only)
+    depends_on:
+      - ringtalk
