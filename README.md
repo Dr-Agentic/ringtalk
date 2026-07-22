@@ -2,7 +2,7 @@
 
 > AI agents as native RingEX teammates. @mention an agent, get expert-level work done in the same thread.
 
-**[Live Demo](https://ringtalk-2026-07-21.pages.dev/journey.html)** · **[Spec](./SPEC.md)**
+**[Live Demo](https://ringtalk-2026-07-21.pages.dev/journey.html)** · **[Spec](./SPEC.md)** · **[GitHub](https://github.com/Dr-Agentic/ringtalk)**
 
 ---
 
@@ -32,8 +32,8 @@ ngrok           # for local webhook testing
 ### 2. Clone & install
 
 ```bash
-git clone https://github.com/Dr-Agentic/ringtalk-2026.git
-cd ringtalk-2026
+git clone https://github.com/Dr-Agentic/ringtalk.git
+cd ringtalk
 npm install
 ```
 
