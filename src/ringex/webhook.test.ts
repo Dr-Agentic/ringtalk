@@ -75,16 +75,19 @@ describe('parseRingEXEvent', () => {
     const event = parseRingEXEvent(body);
     expect(event).not.toBeNull();
     expect(event?.type).toBe('Message4Bot');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((event as any).chatId).toBe('chat-123');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((event as any).from.name).toBe('Morsy');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((event as any).text).toContain('@research-agent');
   });
 
   it('extracts mentions from text when mentions array is empty', () => {
     const body = {
-      type: 'Message4Bot',
+      type: 'Message4Bot' as const,
       chatId: 'chat-123',
-      chatType: 'Group',
+      chatType: 'Group' as const,
       from: { id: 'user-456', name: 'Morsy' },
       text: '@coding-agent review PR #42',
       mentions: [],
@@ -94,14 +97,15 @@ describe('parseRingEXEvent', () => {
 
     const event = parseRingEXEvent(body);
     expect(event).not.toBeNull();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((event as any).mentions).toContain('coding-agent');
   });
 
   it('parses a GroupUpdated event', () => {
     const body = {
-      type: 'GroupUpdated',
+      type: 'GroupUpdated' as const,
       groupId: 'group-123',
-      chatType: 'Group',
+      chatType: 'Group' as const,
       membersAdded: ['user-1', 'user-2'],
       membersRemoved: ['user-3'],
       timestamp: '2026-07-22T10:00:00Z',
@@ -110,6 +114,7 @@ describe('parseRingEXEvent', () => {
     const event = parseRingEXEvent(body);
     expect(event).not.toBeNull();
     expect(event?.type).toBe('GroupUpdated');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((event as any).membersAdded).toHaveLength(2);
   });
 

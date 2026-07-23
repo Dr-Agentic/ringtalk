@@ -12,7 +12,7 @@
     "dev:ngrok": "ngrok http 3000 --config=ngrok.yml & tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "lint": "eslint src --ext .ts",
+    "lint": "eslint src",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },

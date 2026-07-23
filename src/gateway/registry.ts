@@ -1,4 +1,4 @@
-import type { AgentAdapter, AgentResponse, MessageEnvelope } from '../types/index.js';
+import type { AgentAdapter } from '../types/index.js';
 
 /**
  * AgentRegistry maps agent names to their adapter instances.

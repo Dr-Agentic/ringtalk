@@ -1,4 +1,4 @@
-import type { AgentAdapter, AgentResponse, MessageEnvelope } from '../types/index.js';
+import type { AgentResponse, MessageEnvelope } from '../types/index.js';
 import { AgentRegistry } from './registry.js';
 import { InMemorySessionStore } from './session.js';
 import type { RingEXSender } from '../ringex/index.js';
@@ -20,7 +20,7 @@ export class Router {
    * Returns the session ID on success, null on failure.
    */
   async route(env: MessageEnvelope): Promise<string | null> {
-    const { mentionedAgents, chatId, senderName, senderId } = env;
+    const { mentionedAgents, chatId, senderName } = env;
 
     if (mentionedAgents.length === 0) {
       // No agent mentioned — nothing to route
@@ -43,7 +43,7 @@ export class Router {
     const sessionId = `${chatId}:${agentName}`;
 
     // Initialize or resume session
-    const session = this.sessions.set(chatId, agentName);
+    this.sessions.set(chatId, agentName);
 
     // Append user message to session history
     this.sessions.appendMessage(
