@@ -17,6 +17,8 @@ export function validateWebhookSignature(
     .createHmac('sha256', secret)
     .update(rawBody)
     .digest('hex');
+  // timingSafeEqual requires same-length buffers — guard length mismatch
+  if (expected.length !== signature.length) return false;
   return crypto.timingSafeEqual(
     Buffer.from(expected),
     Buffer.from(signature),
@@ -96,9 +98,12 @@ function parseGroupUpdatedEvent(e: Record<string, unknown>): RingEXEvent {
  */
 export function stripMentions(text: string): { cleanText: string; mentionedAgents: string[] } {
   const mentions: string[] = [];
-  const clean = text.replace(/@([\w-]+)/g, (_, name) => {
-    mentions.push(name.trim());
-    return '';
-  }).trim();
+  const clean = text
+    .replace(/@([\w-]+)/g, (_, name) => {
+      mentions.push(name.trim());
+      return '';
+    })
+    .replace(/\s{2,}/g, ' ') // collapse double spaces left by mention removal
+    .trim();
   return { cleanText: clean, mentionedAgents: mentions };
 }
