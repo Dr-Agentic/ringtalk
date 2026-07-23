@@ -67,6 +67,11 @@ npm run dev
 
 ---
 
+# Pre-push checklist
+```bash
+npm run lint && npm run typecheck && npm test -- --run && npm run dev:docker
+```
+
 ## Architecture
 
 ```
