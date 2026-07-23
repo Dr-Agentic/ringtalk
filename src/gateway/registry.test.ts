@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { AgentRegistry } from './registry.js';
 import type { AgentAdapter, AgentResponse, MessageEnvelope } from '../types/index.js';
 

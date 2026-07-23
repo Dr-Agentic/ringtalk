@@ -9,11 +9,20 @@ describe('EchoAdapter', () => {
     threadId: 'chat-1',
     senderId: 'user-1',
     senderName: 'Morsy',
-    mentionedAgents: ['echo-agent'],
+    mentionedAgents: ['echo-agent'] as string[],
     text,
-    rawEvent: { type: 'Message4Bot', chatId: 'chat-1', chatType: 'Direct', from: { id: 'user-1', name: 'Morsy' }, text, mentions: ['echo-agent'], creatorId: 'user-1', creationTime: new Date().toISOString() },
+    rawEvent: Object.freeze({
+      type: 'Message4Bot' as const,
+      chatId: 'chat-1',
+      chatType: 'Direct' as const,
+      from: { id: 'user-1', name: 'Morsy' },
+      text,
+      mentions: ['echo-agent'],
+      creatorId: 'user-1',
+      creationTime: '2026-07-22T10:00:00Z',
+    }),
     sessionId: 'chat-1:echo-agent',
-    timestamp: new Date().toISOString(),
+    timestamp: '2026-07-22T10:00:00Z',
   });
 
   it('returns a text response', async () => {
