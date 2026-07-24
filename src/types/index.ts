@@ -49,6 +49,8 @@ export interface MessageEnvelope {
   rawEvent: RingEXEvent;
   sessionId: string;             // `${chatId}:${agentName}`
   timestamp: string;
+  /** Prior conversation turns for context continuity (optional) */
+  sessionHistory?: Array<{ role: 'user' | 'agent'; content: string }>;
 }
 
 export interface Citation {
@@ -64,6 +66,8 @@ export interface AgentAction {
 
 export interface AgentResponse {
   text: string;
+  agent?: string;             // name of the agent that produced this response
+  model?: string;             // model used (e.g. for LLM agents)
   files?: Media[];
   status?: string;               // e.g. 'Researching 14 sources…'
   citations?: Citation[];

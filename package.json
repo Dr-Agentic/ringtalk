@@ -11,6 +11,7 @@
     "dev": "tsx watch src/index.ts",
     "dev:ngrok": "ngrok http 3000 --config=ngrok.yml & tsx watch src/index.ts",
     "dev:docker": "docker build -t ringtalk:local .",
+    "emulator": "tsx src/emulator/cli.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "lint": "eslint src",

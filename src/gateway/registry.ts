@@ -1,4 +1,5 @@
 import type { AgentAdapter } from '../types/index.js';
+import { createLlmAdapterFromEnv } from '../agents/llm.js';
 
 /**
  * AgentRegistry maps agent names to their adapter instances.
@@ -60,7 +61,13 @@ export async function buildRegistry(): Promise<AgentRegistry> {
     }
   }
 
-  // Ops agent — internal tools + Hermes
+  // OpenRouter LLM agent — available when OPENROUTER_API_KEY is set
+  const llmAdapter = createLlmAdapterFromEnv();
+  if (llmAdapter) {
+    registry.register(llmAdapter);
+  }
+
+  // Ops agent — internal tools
   try {
     const { OpsAdapter } = await import('../agents/ops.js');
     registry.register(new OpsAdapter());
